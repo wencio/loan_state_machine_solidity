@@ -1,4 +1,4 @@
-pragma solidity ^0.5.4;
+pragma solidity ^0.8.0;
 
 contract StateMachine {
     enum State {
@@ -20,7 +20,7 @@ contract StateMachine {
         uint _duration,
         address payable _borrower,
         address payable _lender
-        ) public {
+        ) {
         amount = _amount;
         interest = _interest;
         duration = _duration;
@@ -48,11 +48,11 @@ contract StateMachine {
       if(to == State.ACTIVE) {
         require(state == State.PENDING, 'cannot only go to active from pending');
         state = State.ACTIVE;
-        end = now + duration;
+        end = block.timestamp + duration;
       }
       if(to == State.CLOSED) {
         require(state == State.ACTIVE, 'cannot only go to closed from active');
-        require(now >= end, 'loan hasnt matured yet');
+        require(block.timestamp >= end, 'loan hasnt matured yet');
         state = State.CLOSED;
       }
     }
